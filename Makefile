@@ -16,6 +16,8 @@ export AR=arm-none-eabi-ar
 export AS=arm-none-eabi-as
 export OBJCOPY=arm-none-eabi-objcopy
 
+export STFLASH=st-flash
+
 export ASFLAGS=-g
 export LDFLAGS=-Tstm32f100.ld -Llib
 export CFLAGS=-g -O1 -c -fno-common -mcpu=cortex-m3 -mthumb -DSTM32F10X_MD_VL=1 -DUSE_STDPERIPH_DRIVER=1
@@ -48,6 +50,9 @@ $(PROJ_NAME).elf: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lstm32f10x
 	$(OBJCOPY) -O ihex $(PROJ_NAME).elf $(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(PROJ_NAME).elf $(PROJ_NAME).bin
+	
+flash:
+	$(STFLASH) write $(PROJ_NAME).bin 0x8000000
 
 clean:
 	rm -f *.o
