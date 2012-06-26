@@ -15,8 +15,10 @@ export LD=arm-none-eabi-gcc
 export AR=arm-none-eabi-ar
 export AS=arm-none-eabi-as
 export OBJCOPY=arm-none-eabi-objcopy
+export GDB=arm-none-eabi-gdb
 
 export STFLASH=st-flash
+export STUTIL=st-util
 
 export ASFLAGS=-g
 export LDFLAGS=-Tstm32f100.ld -Llib
@@ -37,7 +39,7 @@ OBJS += $(LIB_ROOT)/startup_stm32f10x_md_vl.s # add startup file to build
 
 ###################################################
 
-.PHONY: lib proj
+.PHONY: lib proj flash gdb-server gdb-client
 
 all: 	lib proj
 
@@ -50,9 +52,15 @@ $(PROJ_NAME).elf: $(OBJS)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) -lstm32f10x
 	$(OBJCOPY) -O ihex $(PROJ_NAME).elf $(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(PROJ_NAME).elf $(PROJ_NAME).bin
-	
-flash:
+
+flash: lib proj
 	$(STFLASH) write $(PROJ_NAME).bin 0x8000000
+
+gdb-server:
+	$(STUTIL) --stlinkv1
+
+gdb-client: lib proj
+	$(GDB) --eval-command="target extended-remote :4242" $(PROJ_NAME).elf
 
 clean:
 	rm -f *.o
@@ -61,3 +69,4 @@ clean:
 	rm -f $(PROJ_NAME).elf
 	rm -f $(PROJ_NAME).hex
 	rm -f $(PROJ_NAME).bin
+	rm -f st-util.log
