@@ -30,10 +30,10 @@ export LIB_ROOT=$(ROOT)/lib
 
 ###################################################
 
-vpath %.c $(ROOT)/src  
+vpath %.c $(ROOT)/src
 
-CFLAGS += -I$(ROOT)/inc -I$(LIB_ROOT) -I$(LIB_ROOT)/inc 
-CFLAGS += -I$(LIB_ROOT)/inc/core -I$(LIB_ROOT)/inc/peripherals 
+CFLAGS += -I$(ROOT)/inc -I$(LIB_ROOT) -I$(LIB_ROOT)/inc
+CFLAGS += -I$(LIB_ROOT)/inc/core -I$(LIB_ROOT)/inc/peripherals
 
 OBJS += $(LIB_ROOT)/startup_stm32f10x_md_vl.s # add startup file to build
 
@@ -69,4 +69,3 @@ clean:
 	rm -f $(PROJ_NAME).elf
 	rm -f $(PROJ_NAME).hex
 	rm -f $(PROJ_NAME).bin
-	rm -f st-util.log
